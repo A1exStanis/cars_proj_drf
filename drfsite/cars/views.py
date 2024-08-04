@@ -18,13 +18,33 @@ class CarAPIView(APIView):
     def post(self, request):
         serializer = CarSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        post_new = Car.objects.create(
-            brand=request.data['brand'],
-            model=request.data['model'],
-            content=request.data['content'],
-            power=request.data['power'],
-            max_speed=request.data['max_speed'],
-            cat_id=request.data['cat_id']
-        )
-        return Response({'post': CarSerializer(post_new).data})
-    
+        serializer.save()
+        return Response({'post': serializer.data})
+
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        if not pk:
+            return Response({'error': 'Method PUT not allowed'})
+
+        try:
+            instance = Car.objects.get(pk=pk)
+        except:
+            return Response({'error': 'Object does not exist'})
+
+        serializer = CarSerializer(data=request.data, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'put': serializer.data})
+
+    def delete(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        if not pk:
+            return Response({'error': 'Method DELETE not allowed'})
+
+        try:
+            instance = Car.objects.get(pk=pk)
+        except:
+            return Response({'error': 'Object does not exist'})
+
+        instance.delete()
+        return Response({'delete': 'Object has been deleted'})
