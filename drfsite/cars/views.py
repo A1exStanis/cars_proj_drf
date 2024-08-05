@@ -6,9 +6,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 
-# class CarAPIView(generics.ListAPIView):
-#     queryset = Car.objects.all()
-#     serializer_class = CarSerializer
+class CarAPIList (generics.ListCreateAPIView):
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
 
 class CarAPIView(APIView):
     def get(self, request):
