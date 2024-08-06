@@ -1,8 +1,10 @@
-from django.urls import path
+from django.urls import path, include
 from .views import *
+from rest_framework import routers
+
+router = routers.SimpleRouter()
+router.register(r'cars', CarViewSet)
 
 urlpatterns = [
-    path('car-list/', CarAPIList.as_view()),
-    path('car-list/<int:pk>', CarAPIUpdate.as_view()),
-    path('car-detail/<int:pk>', CarAPIDetailView.as_view()),
+    path('', include(router.urls)),
 ]
